@@ -67,7 +67,7 @@ func (r *Repository) CreateOrder(ctx context.Context, order *entities.Order) err
 	_, err = r.DB.ExecContext(ctx, `
         INSERT INTO payment (order_uid, transaction, request_id, currency, provider, amount, payment_dt, bank, delivery_cost, goods_total, custom_fee)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-    `, order.OrderUID, order.Payment.Transaction, order.Payment.RequestID, order.Payment.Currency, order.Payment.Provider, order.Payment.Amount, time.Unix(order.Payment.PaymentDT, 0), order.Payment.Bank, order.Payment.DeliveryCost, order.Payment.GoodsTotal, order.Payment.CustomFee)
+    `, order.OrderUID, order.Payment.Transaction, order.Payment.RequestID, order.Payment.Currency, order.Payment.Provider, order.Payment.Amount, order.Payment.PaymentDT, order.Payment.Bank, order.Payment.DeliveryCost, order.Payment.GoodsTotal, order.Payment.CustomFee)
 
 	if err != nil {
 		return fmt.Errorf("%s %s", op, err)
@@ -148,9 +148,9 @@ func (r *Repository) GetOrderById(con context.Context, orderUID string) (*entiti
     FROM 
         orders o
     LEFT JOIN 
-        deliveries d ON o.order_uid = d.order_uid
+        delivery d ON o.order_uid = d.order_uid
     LEFT JOIN 
-        payments p ON o.order_uid = p.order_uid
+        payment p ON o.order_uid = p.order_uid
     LEFT JOIN 
         items i ON o.order_uid = i.order_uid
     WHERE 

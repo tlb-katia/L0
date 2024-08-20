@@ -1,24 +1,29 @@
-# Установите имя образа и контейнера
-PUBLISHER_IMAGE = my-publisher
-PUBLISHER_CONTAINER = publisher-container
 COMPOSE_FILE = docker-compose.yml
 CONTAINER_NAME = app
+PROJECT_DIR = /home/katia/GolandProjects/L0
+NATS_DIR = $(PROJECT_DIR)/internal/server/order/nats_prod
 
-# Команды для сборки и запуска
-.PHONY: build-publisher run-publisher up down
+.PHONY: publisher
 
-# Сборка образа паблишера
-build-publisher:
-	docker build -t $(PUBLISHER_IMAGE) -f ./server/order/nats_prod/Dockerfile .
+all: up
 
-# Запуск контейнера паблишера
-run-publisher:
-	docker run --rm --name publisher-container --network l0_my-network my-publisher
-
-# Запуск Docker Compose
-up:
+up: permission
 	docker-compose up --build $(CONTAINER_NAME)
 
-# Остановка и удаление контейнеров, сетей, томов
+publisher:
+	cd $(NATS_DIR) && go run main.go
+
+
+clean-data: permission
+	rm -rf pkg/repository/db/pgdata
+	rm -rf pkg/storage/redis/data
+
 down:
 	docker-compose -f $(COMPOSE_FILE) down
+
+server-logs:
+	docker logs $(CONTAINER_NAME)
+
+
+permission:
+	sudo chmod -R 755 $(PROJECT_DIR)/pkg/repository/db/pgdata

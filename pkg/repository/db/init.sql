@@ -9,7 +9,7 @@ CREATE TABLE orders (
                         delivery_service VARCHAR,
                         shardkey VARCHAR,
                         sm_id INT,
-                        date_created TIMESTAMP,
+                        date_created VARCHAR,
                         oof_shard VARCHAR
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE payment (
                          currency VARCHAR,
                          provider VARCHAR,
                          amount INT,
-                         payment_dt TIMESTAMP,
+                         payment_dt VARCHAR,
                          bank VARCHAR,
                          delivery_cost INT,
                          goods_total INT,
@@ -53,3 +53,9 @@ CREATE TABLE items (
                        status INT
 );
 
+DELETE FROM delivery WHERE order_uid = 'b563feb7b2b84b6test';
+DELETE FROM payment WHERE order_uid = 'b563feb7b2b84b6test';
+DELETE FROM items WHERE order_uid = 'b563feb7b2b84b6test';
+DELETE FROM orders WHERE order_uid = 'b563feb7b2b84b6test';
+
+drop table delivery, payment, items, orders;

@@ -13,8 +13,7 @@ services:
     volumes:
       - ./pkg/repository/db/pgdata:/var/lib/postgresql/data
       - ./pkg/repository/db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - l0_my-network
+
 
   redis:
     container_name: order_redis_db
@@ -24,12 +23,11 @@ services:
     restart: always
     volumes:
       - ./pkg/repository/redis/data:/data
-    networks:
-      - l0_my-network
+
 
   nats-streaming:
     container_name: nats-streaming
-    image: nats-streaming:latest
+    image: nats-streaming:0.25.5
     ports:
       - "4222:4222"
       - "8222:8222"
@@ -40,8 +38,7 @@ services:
     volumes:
       - ./pkg/repository/nats/data:/data/stan/store
     restart: always
-    networks:
-      - l0_my-network
+
 
   app:
     container_name: app
@@ -55,9 +52,6 @@ services:
       - redis
       - nats-streaming
     env_file: .env
-    networks:
-      - l0_my-network
 
-networks:
-  l0_my-network:
-    driver: bridge
+
+

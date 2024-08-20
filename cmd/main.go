@@ -2,10 +2,10 @@ package main
 
 import (
 	"L0/config"
+	"L0/internal/server"
 	"L0/pkg/repository/db"
 	"L0/pkg/repository/nats"
 	"L0/pkg/repository/redis"
-	"L0/server"
 	"github.com/go-chi/chi/v5"
 	"log/slog"
 	"os"
@@ -47,7 +47,6 @@ func main() {
 
 	log.Info("server stopped")
 
-	//fmt.Println("I can work!")
 }
 
 func setupLogger(env string) *slog.Logger {
